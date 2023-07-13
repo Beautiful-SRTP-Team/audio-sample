@@ -1,0 +1,162 @@
+<template>
+  <v-container class="base-recorder" fill-height>
+    <v-container justify="center">
+      <v-select
+        v-model="selected"
+        :items="selectItems"
+        item-title="ty"
+        item-value="idx"
+        label="Select Mode"
+        @select="onSelectSwitch()"
+      ></v-select>
+      <v-col sm="6" md="4" cols="auto">
+        <voice-recorder
+          v-if="selected == 1"
+          :set-payload="setSendPayload"
+          :set-error="setError"
+        />
+        <voice-uploader
+          v-else-if="selected == 2"
+          :set-payload="setSendPayload"
+        />
+      </v-col>
+      <v-col sm="6" md="4" cols="auto">
+        <v-btn
+          block
+          rounded="xl"
+          size="x-large"
+          v-bind:disabled="sendBase64.length == 0"
+          @click="uploadVoice()"
+        >
+          识别
+        </v-btn>
+      </v-col>
+    </v-container>
+    <v-divider />
+    <v-container justify="center" v-if="recordObjectUrl.length > 0">
+      <v-layout column align-center justify-center>
+        <v-flex>
+          <audio
+            class="d-block ma-2 pa-2"
+            controls
+            id="audio-player"
+            ref="audioPlayer"
+            :src="recordObjectUrl"
+          ></audio>
+        </v-flex>
+      </v-layout>
+    </v-container>
+    <v-divider />
+    <v-container v-if="sended">
+      <v-card>
+        <template v-slot:title>{{ genResultTitle() }} </template>
+
+        <template v-slot:subtitle> Powered by Speech-Transformer </template>
+
+        <template v-slot:text>
+          <v-list
+            v-if="recognitionResult.length != 0"
+            :items="recognitionResult"
+            item-title="value"
+            item-value="id"
+          ></v-list>
+          <p v-else-if="errorMsg.length != 0">错误：{{ errorMsg }}</p>
+          <v-progress-circular
+            v-else
+            indeterminate
+            color="primary"
+            justify="center"
+          ></v-progress-circular>
+        </template>
+      </v-card>
+    </v-container>
+  </v-container>
+</template>
+
+<script setup lang="ts">
+import VoiceUploader from "./VoiceUploader.vue";
+import VoiceRecorder from "./VoiceRecorder.vue";
+import { ref, watch } from "vue";
+const selected = ref(0);
+const selectItems = [
+  { ty: "None", idx: 0 },
+  { ty: "AudioRecord", idx: 1 },
+  { ty: "FileSelect", idx: 2 },
+];
+const recordObjectUrl = ref("");
+const sendBase64 = ref("");
+const recognitionResult = ref<{ value: string; id: number }[]>([]);
+const errorMsg = ref("");
+const sended = ref(false);
+const wav = ref(false);
+
+watch(selected, (_) => {
+  onSelectSwitch();
+});
+
+function setSendPayload(
+  payload: string,
+  obj_url: string,
+  is_wav: boolean = false
+) {
+  sendBase64.value = payload;
+  recordObjectUrl.value = obj_url;
+  wav.value = is_wav;
+}
+
+function setError(err: string) {
+  errorMsg.value = err;
+}
+
+const onSelectSwitch = () => {
+  console.log("switch select");
+  recordObjectUrl.value = "";
+  sendBase64.value = "";
+  errorMsg.value = "";
+  recognitionResult.value = [];
+  sended.value = false;
+  wav.value = false;
+};
+
+const genResultTitle = () => {
+  if (errorMsg.value.length != 0) {
+    return "发生错误";
+  } else if (recognitionResult.value.length != 0) {
+    return "识别结果";
+  } else {
+    return "识别中";
+  }
+};
+
+const uploadVoice = () => {
+  if (sendBase64.value.length != 0) {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        base64_voice: sendBase64.value,
+        voice_type: "audio/webm",
+        is_egg: !wav.value,
+      }),
+    };
+
+    console.log(requestOptions);
+    sended.value = true;
+    fetch("http://192.168.1.201:8000/recognize", requestOptions)
+      .then((resp) => {
+        resp.json().then((data: string[]) => {
+          console.log(data);
+          recognitionResult.value = data.map((v, idx, _) => {
+            return { value: v, id: idx };
+          });
+          console.log(recognitionResult.value);
+        });
+        sendBase64.value = "";
+      })
+      .catch((err) => {
+        errorMsg.value = err.toString();
+        console.log("识别错误：" + err);
+      });
+  }
+};
+</script>
