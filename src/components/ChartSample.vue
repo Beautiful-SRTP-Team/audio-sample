@@ -33,7 +33,12 @@
     <v-card>
       <template v-slot:title>使用 HighChart 样式</template>
       <template v-slot:subtitle>
-        <v-btn href="https://github.com/highcharts/highcharts-vue?ref=madewithvuejs.com#demo-apps">查看</v-btn>
+        <v-col>
+
+          <v-btn href="https://github.com/highcharts/highcharts-vue?ref=madewithvuejs.com#demo-apps">查看</v-btn>
+          <v-btn href="https://www.highcharts.com/docs/getting-started/your-first-chart">文档</v-btn>
+
+        </v-col>
       </template>
       <template v-slot:text>
 
@@ -83,9 +88,47 @@ const chartJsOptions = {responsive: true}
 defineComponent({highcharts: HighChart})
 
 const higtChartOptions = {
+  chart: {
+    type: 'column'
+  },
+  title: {
+    text: '邦邦 的学习记录'
+  },
+  xAxis: {
+    categories: ['05-06', '05-07', '05-08', '05-09', '05-10', '05-11']
+  },
+  yAxis: {
+    title: {
+      text: '题目数量'
+    }
+  },
+  legend: {
+    enabled: true
+  },
+
+  plotOptions: {
+    series: {
+      showInLegend: true
+    }
+  },
   series: [{
-    data: [1, 2, 3] // sample data
-  }]
+    // type: 'columnrange',
+    name: '正确题目',
+    id: 'ok',
+    data: [1, 0, 4, 5, 6, 9],
+
+  }, {
+    // type: 'columnrange',
+    name: '错误题目',
+    id: 'not-ok',
+    data: [5, 7, 3, 12, 6, 8]
+
+  },
+  //   {
+  //   type: 'dema',
+  //   linkedTo: 'ok'
+  // }
+  ]
 }
 </script>
 
