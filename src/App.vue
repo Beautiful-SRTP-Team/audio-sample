@@ -2,11 +2,14 @@
   <v-app>
     <navigate-bar :select-items="selectItems" :select-switch="idx => select = idx"/>
     <v-main>
+      <v-row align="center" class="fill-height">
+
       <!-- <audio-example/> -->
       <recognition v-if="select==1"/>
       <!-- <voice-recorder /> -->
       <!-- <voice-uploader/> -->
       <chart-sample v-else-if="select ==2"/>
+      </v-row>
     </v-main>
   </v-app>
 </template>
