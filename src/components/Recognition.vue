@@ -2,70 +2,68 @@
   <v-container class="base-recorder" fill-height>
     <v-container justify="center">
       <v-select
-        v-model="selected"
-        :items="selectItems"
-        item-title="ty"
-        item-value="idx"
-        label="Select Mode"
-        @select="onSelectSwitch()"
+          v-model="selected"
+          :items="selectItems"
+          item-title="ty"
+          item-value="idx"
+          label="Select Mode"
+          @select="onSelectSwitch()"
       ></v-select>
-      <v-col sm="6" md="4" cols="auto">
+      <v-col cols="auto" md="4" sm="6">
         <voice-recorder
-          v-if="selected == 1"
-          :set-payload="setSendPayload"
-          :set-error="setError"
+            v-if="selected == 1"
+            :set-error="setError"
+            :set-payload="setSendPayload"
         />
         <voice-uploader
-          v-else-if="selected == 2"
-          :set-payload="setSendPayload"
+            v-else-if="selected == 2"
+            :set-payload="setSendPayload"
         />
       </v-col>
-      <v-col sm="6" md="4" cols="auto">
+      <v-col cols="auto" md="4" sm="6">
         <v-btn
-          block
-          rounded="xl"
-          size="x-large"
-          v-bind:disabled="sendBase64.length == 0"
-          @click="uploadVoice()"
+            block
+            rounded="xl"
+            size="x-large"
+            v-bind:disabled="sendBase64.length == 0"
+            @click="uploadVoice()"
         >
           识别
         </v-btn>
       </v-col>
     </v-container>
-    <v-divider />
-    <v-container justify="center" v-if="recordObjectUrl.length > 0">
-      <v-layout column align-center justify-center>
-        <v-flex>
-          <audio
-            class="d-block ma-2 pa-2"
-            controls
+    <v-divider/>
+    <v-container v-if="recordObjectUrl.length > 0" justify="center">
+      <v-layout align-center column justify-center>
+        <audio
             id="audio-player"
             ref="audioPlayer"
             :src="recordObjectUrl"
-          ></audio>
-        </v-flex>
+            class="d-block ma-2 pa-2"
+            controls
+        ></audio>
       </v-layout>
     </v-container>
-    <v-divider />
+    <v-divider/>
     <v-container v-if="sended">
       <v-card>
-        <template v-slot:title>{{ genResultTitle() }} </template>
+        <template v-slot:title>{{ genResultTitle() }}</template>
 
-        <template v-slot:subtitle> Powered by Speech-Transformer </template>
+        <template v-slot:subtitle> Powered by Speech-Transformer</template>
 
         <template v-slot:text>
           <v-list
-            v-if="recognitionResult.length != 0"
-            :items="recognitionResult"
-            item-title="value"
-            item-value="id"
+              v-if="recognitionResult.length != 0"
+              :items="recognitionResult"
+              item-title="value"
+              item-value="id"
           ></v-list>
           <p v-else-if="errorMsg.length != 0">错误：{{ errorMsg }}</p>
           <v-progress-circular
-            v-else
-            indeterminate
-            color="primary"
-            justify="center"
+              v-else
+              color="primary"
+              indeterminate
+              justify="center"
           ></v-progress-circular>
         </template>
       </v-card>
@@ -73,15 +71,16 @@
   </v-container>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import VoiceUploader from "./VoiceUploader.vue";
 import VoiceRecorder from "./VoiceRecorder.vue";
-import { ref, watch } from "vue";
+import {ref, watch} from "vue";
+
 const selected = ref(0);
 const selectItems = [
-  { ty: "None", idx: 0 },
-  { ty: "AudioRecord", idx: 1 },
-  { ty: "FileSelect", idx: 2 },
+  {ty: "None", idx: 0},
+  {ty: "AudioRecord", idx: 1},
+  {ty: "FileSelect", idx: 2},
 ];
 const recordObjectUrl = ref("");
 const sendBase64 = ref("");
@@ -95,9 +94,9 @@ watch(selected, (_) => {
 });
 
 function setSendPayload(
-  payload: string,
-  obj_url: string,
-  is_wav: boolean = false
+    payload: string,
+    obj_url: string,
+    is_wav: boolean = false
 ) {
   sendBase64.value = payload;
   recordObjectUrl.value = obj_url;
@@ -132,7 +131,7 @@ const uploadVoice = () => {
   if (sendBase64.value.length != 0) {
     const requestOptions = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
         base64_voice: sendBase64.value,
         voice_type: "audio/webm",
@@ -143,20 +142,20 @@ const uploadVoice = () => {
     console.log(requestOptions);
     sended.value = true;
     fetch("http://192.168.1.201:8000/recognize", requestOptions)
-      .then((resp) => {
-        resp.json().then((data: string[]) => {
-          console.log(data);
-          recognitionResult.value = data.map((v, idx, _) => {
-            return { value: v, id: idx };
+        .then((resp) => {
+          resp.json().then((data: string[]) => {
+            console.log(data);
+            recognitionResult.value = data.map((v, idx, _) => {
+              return {value: v, id: idx};
+            });
+            console.log(recognitionResult.value);
           });
-          console.log(recognitionResult.value);
+          sendBase64.value = "";
+        })
+        .catch((err) => {
+          errorMsg.value = err.toString();
+          console.log("识别错误：" + err);
         });
-        sendBase64.value = "";
-      })
-      .catch((err) => {
-        errorMsg.value = err.toString();
-        console.log("识别错误：" + err);
-      });
   }
 };
 </script>

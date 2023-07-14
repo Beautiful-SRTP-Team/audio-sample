@@ -1,17 +1,12 @@
 <template>
   <v-app>
-    <v-app-bar :elevation="3" color="primary" density="compact">
-      <template v-slot:prepend>
-          <v-app-bar-nav-icon></v-app-bar-nav-icon>
-        </template>
-      <v-app-bar-title >语音识别</v-app-bar-title>
-    </v-app-bar>
+    <navigate-bar :select-items="selectItems" :select-switch="idx => select = idx"/>
     <v-main>
       <!-- <audio-example/> -->
-<!--      <recognition/>-->
+      <recognition v-if="select==1"/>
       <!-- <voice-recorder /> -->
       <!-- <voice-uploader/> -->
-      <chart-sample/>
+      <chart-sample v-else-if="select ==2"/>
     </v-main>
   </v-app>
 </template>
