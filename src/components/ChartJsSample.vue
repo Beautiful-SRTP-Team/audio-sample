@@ -48,7 +48,7 @@ const chartJsOptions = {
           const date = new Date(data[0].parsed.x)
           console.log(date)
           const formatter = new Intl.DateTimeFormat("zh-cn",
-              {dateStyle:"medium"})
+              {dateStyle:"medium"} as any)
           return formatter.format(date)
         }
       }
@@ -57,6 +57,12 @@ const chartJsOptions = {
   scales: {
     y: {
       beginAtZero: true,
+      ticks: {
+        // Include a dollar sign in the ticks
+        callback: function(value, index, ticks) {
+          return '$' + value;
+        }
+      }
 
     },
     x: {
@@ -67,7 +73,6 @@ const chartJsOptions = {
         }
       },
       time: {
-        // unit: 'day',
         minUnit:"day",
         // Luxon format string
         tooltipFormat: 'DD T',
@@ -86,7 +91,7 @@ const randomReset =()=>{
 </script>
 
 <template>
-  <chart-bar :data="chartJsData" :options="chartJsOptions"/>
+  <chart-bar :data="chartJsData" :options="chartJsOptions" class="elevation-3 rounded-lg ma-5 h-50"/>
 </template>
 
 <style scoped>

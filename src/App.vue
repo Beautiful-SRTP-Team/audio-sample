@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar :elevation="3" color="primary" density="compact"> 
+    <v-app-bar :elevation="3" color="primary" density="compact">
       <template v-slot:prepend>
           <v-app-bar-nav-icon></v-app-bar-nav-icon>
         </template>
@@ -8,7 +8,7 @@
     </v-app-bar>
     <v-main>
       <!-- <audio-example/> -->
-      <recognition/>
+<!--      <recognition/>-->
       <!-- <voice-recorder /> -->
       <!-- <voice-uploader/> -->
       <chart-sample/>

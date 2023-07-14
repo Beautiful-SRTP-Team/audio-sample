@@ -1,52 +1,53 @@
 <template>
-  <v-container>
-    <v-card>
-      <template v-slot:title>使用 Google Chart 样式</template>
-      <template v-slot:subtitle>
-        <v-btn href="https://madewithvuejs.com/go/vue-js-google-charts">查看</v-btn>
-      </template>
-      <template v-slot:text>
+  <v-container class="h-auto w-75">
+    <!--    <v-card>-->
+    <!--      <template v-slot:title>使用 Google Chart 样式</template>-->
+    <!--      <template v-slot:subtitle>-->
+    <!--        <v-btn href="https://madewithvuejs.com/go/vue-js-google-charts">查看</v-btn>-->
+    <!--      </template>-->
+    <!--      <template v-slot:text>-->
 
-        <g-chart
-            :data="GoogleChartData"
-            :options="GoogleChartOption"
-            type="ColumnChart"
-        />
-      </template>
-    </v-card>
-    <v-divider/>
-    <v-card>
+    <!--        <g-chart-->
+    <!--            :data="GoogleChartData"-->
+    <!--            :options="GoogleChartOption"-->
+    <!--            type="ColumnChart"-->
+    <!--        />-->
+    <!--      </template>-->
+    <!--    </v-card>-->
+    <!--    <v-divider/>-->
+    <v-card class="rounded-lg pa-4">
       <template v-slot:title>使用 Chart.Js 样式</template>
       <template v-slot:subtitle>
         <v-btn href="https://www.chartjs.org/docs/latest/">查看</v-btn>
       </template>
       <template v-slot:text>
-    <chart-js-sample/>
-<!--        <bar-->
-<!--            :data="chartJsData"-->
-<!--            :options="chartJsOptions"-->
-<!--        />-->
+
+        <chart-js-sample/>
+        <!--        <bar-->
+        <!--            :data="chartJsData"-->
+        <!--            :options="chartJsOptions"-->
+        <!--        />-->
       </template>
     </v-card>
 
-    <v-divider/>
-    <v-card>
-      <template v-slot:title>使用 HighChart 样式</template>
-      <template v-slot:subtitle>
-        <v-col>
+    <!--    <v-divider/>-->
+    <!--    <v-card>-->
+    <!--      <template v-slot:title>使用 HighChart 样式</template>-->
+    <!--      <template v-slot:subtitle>-->
+    <!--        <v-col>-->
 
-          <v-btn href="https://github.com/highcharts/highcharts-vue?ref=madewithvuejs.com#demo-apps">查看</v-btn>
-          <v-btn href="https://www.highcharts.com/docs/getting-started/your-first-chart">文档</v-btn>
+    <!--          <v-btn href="https://github.com/highcharts/highcharts-vue?ref=madewithvuejs.com#demo-apps">查看</v-btn>-->
+    <!--          <v-btn href="https://www.highcharts.com/docs/getting-started/your-first-chart">文档</v-btn>-->
 
-        </v-col>
-      </template>
-      <template v-slot:text>
+    <!--        </v-col>-->
+    <!--      </template>-->
+    <!--      <template v-slot:text>-->
 
-<!--        <HighChart-->
-<!--            :options="higtChartOptions"-->
-<!--        />-->
-      </template>
-    </v-card>
+    <!--&lt;!&ndash;        <HighChart&ndash;&gt;-->
+    <!--&lt;!&ndash;            :options="higtChartOptions"&ndash;&gt;-->
+    <!--&lt;!&ndash;        />&ndash;&gt;-->
+    <!--      </template>-->
+    <!--    </v-card>-->
 
   </v-container>
 </template>
@@ -55,11 +56,9 @@
 import {defineComponent, ref} from "vue";
 
 // google chart
-import {GChart} from "vue-google-charts";
 import type {GoogleChartOptions,} from "vue-google-charts/dist/types";
 
 // chart js
-import {Bar} from "vue-chartjs";
 import {BarElement, CategoryScale, Chart as ChartJs, Legend, LinearScale, Title, Tooltip} from "chart.js";
 import {Chart as HighChart} from "highcharts-vue";
 import ChartJsSample from "@/components/ChartJsSample.vue";
@@ -125,10 +124,10 @@ const higtChartOptions = {
     data: [5, 7, 3, 12, 6, 8]
 
   },
-  //   {
-  //   type: 'dema',
-  //   linkedTo: 'ok'
-  // }
+    //   {
+    //   type: 'dema',
+    //   linkedTo: 'ok'
+    // }
   ]
 }
 </script>
