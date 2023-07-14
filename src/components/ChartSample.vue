@@ -18,14 +18,14 @@
     <v-card>
       <template v-slot:title>使用 Chart.Js 样式</template>
       <template v-slot:subtitle>
-        <v-btn href="https://madewithvuejs.com/go/vue-chartjs">查看</v-btn>
+        <v-btn href="https://www.chartjs.org/docs/latest/">查看</v-btn>
       </template>
       <template v-slot:text>
-
-        <bar
-            :data="chartJsData"
-            :options="chartJsOptions"
-        />
+    <chart-js-sample/>
+<!--        <bar-->
+<!--            :data="chartJsData"-->
+<!--            :options="chartJsOptions"-->
+<!--        />-->
       </template>
     </v-card>
 
@@ -42,9 +42,9 @@
       </template>
       <template v-slot:text>
 
-        <HighChart
-            :options="higtChartOptions"
-        />
+<!--        <HighChart-->
+<!--            :options="higtChartOptions"-->
+<!--        />-->
       </template>
     </v-card>
 
@@ -62,6 +62,7 @@ import type {GoogleChartOptions,} from "vue-google-charts/dist/types";
 import {Bar} from "vue-chartjs";
 import {BarElement, CategoryScale, Chart as ChartJs, Legend, LinearScale, Title, Tooltip} from "chart.js";
 import {Chart as HighChart} from "highcharts-vue";
+import ChartJsSample from "@/components/ChartJsSample.vue";
 
 ChartJs.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
