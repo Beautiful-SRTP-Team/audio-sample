@@ -23,10 +23,13 @@ import VoiceUploader from "./components/VoiceUploader.vue";
 import Recognition from "./components/Recognition.vue";
 import AudioExample from "./components/AudioExample.vue";
 import ChartSample from "@/components/ChartSample.vue";
+import NavigateBar from "@/components/NavigateBar.vue";
+
 export default defineComponent({
   name: "App",
 
   components: {
+    NavigateBar,
     ChartSample,
     VoiceRecorder,
     VoiceUploader,
@@ -36,7 +39,11 @@ export default defineComponent({
 
   data() {
     return {
-      //
+      selectItems :[
+        {text:"语音识别",idx :1},
+        {text:"学习记录",idx:2}
+      ],
+      select:1
     };
   },
 });
