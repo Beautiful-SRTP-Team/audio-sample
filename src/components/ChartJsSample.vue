@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {Chart,Scatter} from "vue-chartjs";
+import {Scatter} from "vue-chartjs";
 import {
   CategoryScale,
   Chart as ChartJs,
@@ -12,7 +12,7 @@ import {
   Tooltip
 } from "chart.js";
 import "chartjs-adapter-luxon"
-import {computed, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import {LearnRecord} from "@/utils/LearnRecord";
 
 ChartJs.register(TimeScale, Title, Tooltip, Legend, CategoryScale, PointElement, LineElement, LogarithmicScale)
@@ -34,6 +34,23 @@ const OriginDataSet = ref([
   new LearnRecord(new Date(2023, 6, 14), 12),
   new LearnRecord(new Date(2023, 6, 15), 12),
 ])
+
+const isTooSmall = ref(false)
+
+onMounted(() => {
+  checkIsWidthTooSmall()
+  window.addEventListener("resize", checkIsWidthTooSmall)
+})
+
+onUnmounted(() => {
+  window.removeEventListener("resize", checkIsWidthTooSmall)
+})
+
+const checkIsWidthTooSmall = () => {
+  const width = document.documentElement.clientWidth
+  isTooSmall.value = width <= 960;
+}
+
 
 const chartJsOptions = {
   responsive: true,
@@ -145,7 +162,7 @@ const ComputedChartData = computed(() => {
       , backgroundColor: 'rgb(24,75,69)',
       borderColor: 'rgb(24,75,69)',
       borderWidth: 2,
-    },{
+    }, {
       id: 1,
       type: "bar",
       backgroundColor: 'rgb(169,14,16)',
@@ -174,8 +191,11 @@ const ComputedChartData = computed(() => {
 </script>
 
 <template>
-  <scatter :data="ComputedChartData" :options="chartJsOptions" class="elevation-3 rounded-lg ma-5 h-50"/>
-  <v-btn @click="randomReset()">Random Reset</v-btn>
+  <v-sheet v-if="isTooSmall">设备窗口过小，无法完整展示表格</v-sheet>
+  <v-container v-else>
+    <scatter :data="ComputedChartData" :options="chartJsOptions" class="elevation-3 rounded-lg ma-5 h-50"/>
+    <v-btn @click="randomReset()">Random Reset</v-btn>
+  </v-container>
 </template>
 
 <style scoped>
