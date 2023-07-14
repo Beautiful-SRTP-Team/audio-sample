@@ -1,11 +1,22 @@
 <script lang="ts" setup>
-import {Bar as ChartBar} from "vue-chartjs";
-import {BarElement, CategoryScale, Chart as ChartJs, Legend, TimeScale, Title, Tooltip} from "chart.js";
+import {Line as ChartLine} from "vue-chartjs";
+import {
+  BarElement,
+  CategoryScale,
+  Chart as ChartJs,
+  Legend,
+  LineElement,
+  PointElement,
+  TimeScale,
+  Title,
+  Tooltip
+} from "chart.js";
 import "chartjs-adapter-luxon"
-import {ref} from "vue";
+import {computed, reactive, ref} from "vue";
 import {LearnRecord} from "@/utils/LearnRecord";
+import {da} from "vuetify/locale";
 
-ChartJs.register(TimeScale, Title, Tooltip, Legend, BarElement, CategoryScale,)
+ChartJs.register(TimeScale, Title, Tooltip, Legend, CategoryScale,PointElement,LineElement)
 
 const OriginDataSet = ref([
   new LearnRecord(new Date(2023, 6, 1), 13),
@@ -16,19 +27,19 @@ const OriginDataSet = ref([
   new LearnRecord(new Date(2023, 6, 6), 11)
 ])
 
-const chartJsData = ref({
-  labels: OriginDataSet.value.map(record => record.mapToLabels()),
-  datasets: [{
-    backgroundColor: 'rgba(99,130,255,0.2)',
-    borderColor: 'rgba(51,78,255,0.2)',
-    label: "学习记录",
-    fill: false,
-    data: OriginDataSet.value.map(record => record.mapToData()),
-    borderWidth: 4,
-    borderRadius: 20,
-    borderSkipped: false,
-  }]
-})
+// const chartJsData = reactive({
+//   labels: OriginDataSet.value.map(record => record.mapToLabels()),
+//   datasets: [{
+//     backgroundColor: 'rgba(99,130,255,0.2)',
+//     borderColor: 'rgba(51,78,255,0.2)',
+//     label: "学习记录",
+//     fill: false,
+//     data: OriginDataSet.value.map(record => record.mapToData()),
+//     borderWidth: 4,
+//     borderRadius: 20,
+//     borderSkipped: false,
+//   }]
+// })
 const chartJsOptions = {
   responsive: true,
   layout: {
@@ -46,7 +57,6 @@ const chartJsOptions = {
       callbacks: {
         title: (data) => {
           const date = new Date(data[0].parsed.x)
-          console.log(date)
           const formatter = new Intl.DateTimeFormat("zh-cn",
               {dateStyle:"medium"} as any)
           return formatter.format(date)
@@ -82,16 +92,33 @@ const chartJsOptions = {
   }
 }
 const randomReset =()=>{
-  OriginDataSet.value.map(data=>{
-
-
+  OriginDataSet.value = OriginDataSet.value.map(data=>{
+    data.total = Math.floor(Math.random() * 25)
+    console.log("new total " + data.total + "for " + data.date)
     return data
   })
   }
+const ComputedChartData = computed(()=>{
+  return {
+    labels: OriginDataSet.value.map(record => record.mapToLabels()),
+    datasets: [{
+      backgroundColor: 'rgba(99,130,255,0.2)',
+      borderColor: 'rgba(51,78,255,0.2)',
+      label: "学习记录",
+      fill: false,
+      data: OriginDataSet.value.map(record => record.mapToData()),
+      borderWidth: 4,
+      borderRadius: 20,
+      borderSkipped: false,
+    }]
+  }
+})
+
 </script>
 
 <template>
-  <chart-bar :data="chartJsData" :options="chartJsOptions" class="elevation-3 rounded-lg ma-5 h-50"/>
+  <chart-line :data="ComputedChartData" :options="chartJsOptions" class="elevation-3 rounded-lg ma-5 h-50"/>
+  <v-btn @click="randomReset()" >Random Reset</v-btn>
 </template>
 
 <style scoped>

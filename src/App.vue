@@ -38,7 +38,7 @@ export default defineComponent({
         {text:"语音识别",idx :1},
         {text:"学习记录",idx:2}
       ],
-      select:1
+      select:2
     };
   },
 });
