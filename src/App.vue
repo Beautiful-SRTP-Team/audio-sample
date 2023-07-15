@@ -1,21 +1,14 @@
 <template>
   <v-app>
-    <navigate-bar :select-items="selectItems" :select-switch="idx => select = idx"/>
+    <navigate-bar :select-items="selectItems"/>
     <v-main>
-      <v-row align="center" class="fill-height">
-
-      <!-- <audio-example/> -->
-      <recognition v-if="select==1"/>
-      <!-- <voice-recorder /> -->
-      <!-- <voice-uploader/> -->
-      <chart-sample v-else-if="select ==2"/>
-      </v-row>
+      <router-view></router-view>
     </v-main>
   </v-app>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import {defineComponent} from "vue";
 import VoiceRecorder from "./components/VoiceRecorder.vue";
 import VoiceUploader from "./components/VoiceUploader.vue";
 import Recognition from "./components/Recognition.vue";
@@ -37,11 +30,10 @@ export default defineComponent({
 
   data() {
     return {
-      selectItems :[
-        {text:"语音识别",idx :1},
-        {text:"学习记录",idx:2}
+      selectItems: [
+        {text: "语音识别", idx: 1, name: "home"},
+        {text: "学习记录", idx: 2, name: "chart"}
       ],
-      select:2
     };
   },
 });
