@@ -16,7 +16,7 @@
 import { onMounted, ref } from "vue";
 import fixWebmDuration from "fix-webm-duration";
 const property = defineProps<{
-  setPayload: (payload: string, objUrl: string, is_wav: boolean) => void;
+  setPayload: (payload: Blob, objUrl: string, is_wav: boolean) => void;
   setError: (err: string) => void;
 }>();
 
@@ -63,15 +63,7 @@ const firstInit = () => {
         console.log(audio);
         var obj_url = window.URL.createObjectURL(audio);
 
-        var reader = new FileReader();
-
-        reader.onload = () => {
-          var v: string = reader.result!!.toString();
-
-          var ret = v.replace(/data:audio\/[^;]+;?[^;]*;base64/g, "");
-          property.setPayload(ret, obj_url, false);
-        };
-        reader.readAsDataURL(audio);
+        property.setPayload(audio, obj_url, false);
       };
       console.log(r.mimeType);
       recorder.value = r;

@@ -9,10 +9,8 @@
 </template>
 
 <script setup lang="ts">
-
-
 const property = defineProps<{
-  setPayload: (payload: string, objUrl: string, is_wav: boolean) => void;
+  setPayload: (payload: Blob, objUrl: string, is_wav: boolean) => void;
 }>();
 
 const onSelectFile = (event: Event) => {
@@ -24,12 +22,12 @@ const onSelectFile = (event: Event) => {
   let fileReader = new FileReader();
 
   fileReader.onloadend = (_ev) => {
-    var v: string = fileReader.result!.toString();
-    console.log(v.length);
-
-    var ret = v.replace(/data:audio\/[^;]+;base64/g, "");
-    property.setPayload(ret, v, true);
+    var v = fileReader.result!;
+    // console.log(v.length);
+    var filePayload = new Blob([v], { type: file.type });
+    // var ret = v.replace(/data:audio\/[^;]+;base64/g, "");
+    property.setPayload(filePayload, window.URL.createObjectURL(file), true);
   };
-  fileReader.readAsDataURL(file);
+  fileReader.readAsArrayBuffer(file);
 };
 </script>
