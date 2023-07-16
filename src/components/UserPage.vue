@@ -1,6 +1,6 @@
 <template>
-  <v-container class="ma-5">
-    <v-card v-if="loaded">
+  <v-container class="ma-5 w-33">
+    <v-card v-if="loaded" class="rounded-lg">
       <template v-slot:title>{{ s_name }}</template>
       <template v-slot:subtitle>{{ s_level }}</template>
       <template v-slot:text>{{ s_exp }}</template>
