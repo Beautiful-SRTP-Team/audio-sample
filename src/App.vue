@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <navigate-bar :select-items="selectItems"/>
+    <navigate-bar :select-items="selectItems" />
     <v-main>
       <router-view></router-view>
     </v-main>
@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import { defineComponent } from "vue";
 import VoiceRecorder from "./components/VoiceRecorder.vue";
 import VoiceUploader from "./components/VoiceUploader.vue";
 import Recognition from "./components/Recognition.vue";
@@ -25,14 +25,15 @@ export default defineComponent({
     VoiceRecorder,
     VoiceUploader,
     Recognition,
-    AudioExample
+    AudioExample,
   },
 
   data() {
     return {
       selectItems: [
-        {text: "语音识别", idx: 1, name: "home"},
-        {text: "学习记录", idx: 2, name: "chart"}
+        { text: "语音识别", name: "home" },
+        { text: "学习记录", name: "chart" },
+        { text: "用户中心", name: "user" },
       ],
     };
   },
