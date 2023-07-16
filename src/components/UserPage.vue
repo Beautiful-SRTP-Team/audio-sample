@@ -1,9 +1,19 @@
 <template>
-  <v-container class="ma-5 w-33">
-    <v-card v-if="loaded" class="rounded-lg">
-      <template v-slot:title>{{ s_name }}</template>
-      <template v-slot:subtitle>{{ s_level }}</template>
-      <template v-slot:text>{{ s_exp }}</template>
+  <v-container class="w-33">
+    <v-card v-if="loaded" class="rounded-lg ma-5">
+      <v-col align="end" class="pa-5 ma-5">
+        <v-row>
+          <v-avatar size="56" color="primary">
+            {{ s_name[0] }}
+          </v-avatar>
+          <v-col>
+            <p>{{ s_name }}</p>
+            <p>{{ s_level }}</p>
+          </v-col>
+        </v-row>
+        <v-divider />
+        <p>{{ s_exp }}</p>
+      </v-col>
     </v-card>
   </v-container>
 </template>
