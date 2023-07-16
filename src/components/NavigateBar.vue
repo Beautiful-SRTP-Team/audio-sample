@@ -12,9 +12,15 @@ const selectItems = property.selectItems.map((value, idx, _) => {
 });
 const drawer = ref(false);
 const router = useRouter();
-const selectItem = (id: any) => {
+const selectItem = ({
+  id,
+}: {
+  id: unknown;
+  value: boolean;
+  path: unknown[];
+}) => {
   console.log(id);
-  router.push({ name: id });
+  router.push({ name: id as string });
   expandDrawer();
 };
 
