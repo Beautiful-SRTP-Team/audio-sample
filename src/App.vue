@@ -34,6 +34,8 @@ export default defineComponent({
         { text: "语音识别", name: "home" },
         { text: "学习记录", name: "chart" },
         { text: "用户中心", name: "user" },
+        { text: "题目", name: "quiz" },
+        { text: "测试", name: "sample" },
       ],
     };
   },

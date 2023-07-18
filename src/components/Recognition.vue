@@ -85,6 +85,7 @@ const selectItems = [
 ];
 const recordObjectUrl = ref("");
 const sendBlob = ref<Blob | null>(null);
+const base64Code = ref<string>("");
 const recognitionResult = ref<{ value: string; id: number }[]>([]);
 const errorMsg = ref("");
 const sended = ref(false);
@@ -100,6 +101,17 @@ function setSendPayload(
   is_wav: boolean = false
 ) {
   sendBlob.value = payload;
+  const reader =  new FileReader()
+  reader.onload = (ev)=>{
+    let st = reader.result!.toString()
+    console.log(st);
+    
+    base64Code.value = st
+  }
+
+  reader.readAsDataURL(payload)
+
+
   recordObjectUrl.value = obj_url;
   wav.value = is_wav;
 }

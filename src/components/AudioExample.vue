@@ -12,7 +12,9 @@
       <v-col sm="6" md="4" cols="auto">
         <v-btn :disabled="audioURL == null">Upload</v-btn>
       </v-col>
-      <audio v-if="audioURL != null" controls :src="audioURL"></audio>
+      <audio ref="audio" autoplay v-if="audioURL != null"  :src="audioURL"></audio>
+      <v-btn @click="loadAudio">获取音频</v-btn>
+      <!-- <v-btn @click="play">播放</v-btn> -->
     </v-container>
   </div>
 </template>
@@ -31,6 +33,8 @@ const audioURL = ref<null | string>(null);
 const audioBlob = ref<null | Blob>(null);
 // 录音开始时间
 const startAt = ref(Date.now());
+
+const audio = ref<HTMLAudioElement| null>()
 
 const onQueryPermission = () => {
   navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
@@ -71,5 +75,27 @@ const onRecordSwitch = () => {
   }
   console.log(`now record state is ${mediaRecorder.value?.state}`);
 };
+
+
+const loadAudio = ()=>{
+  fetch("http://127.0.0.1:4523/m1/2536058-0-default/quiz/get_voice" , {
+    method:"POST",
+    headers:{"content-type" :"application/json"}
+    ,body:JSON.stringify({"text":"a"})
+  })
+  .then(async(resp) =>await resp.json())
+  .then( (value: {audio:string, type:string}) =>{
+    audioURL.value = `data:${value.type};base64,${value.audio}`
+    console.log(audioURL.value);
+    
+  })
+}
+
+// const play = ()=>{
+//   if( audio.value != null){
+//     // audio.value.volume=1
+//     audio.value.play()
+//   }
+// }
 </script>
 

@@ -14,7 +14,7 @@ const drawer = ref(false);
 const router = useRouter();
 const selectItem = (id: any) => {
   console.log(id);
-  router.push({ name: id });
+  router.push({ name: id.id });
   expandDrawer();
 };
 
